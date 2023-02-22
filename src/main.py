@@ -52,6 +52,7 @@ def main():
             abstract=_paper_info['abstract'].strip(),
             author=_paper_info['author'].strip(),
             citation=_paper_info['citation'].strip(),
+            url=_paper_info['url'],
         ).json())
 
     with open(os.path.join(project_root, 'assets', f'{name}-{year}-{args.type}.json'), mode='w', encoding='utf-8') as f:

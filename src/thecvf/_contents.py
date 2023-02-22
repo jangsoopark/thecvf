@@ -3,7 +3,7 @@ import json
 
 class Contents(object):
 
-    def __init__(self, name, year, location, type_, topic, title, abstract, author, citation):
+    def __init__(self, name, year, location, type_, topic, title, abstract, author, citation, url):
         self.name: str = name
         self.year: str = year
         self.location: str = location
@@ -13,6 +13,7 @@ class Contents(object):
         self.abstract: str = abstract
         self.author: str = author
         self.citation: str = citation
+        self.url: str = url
 
     def json(self):
         return {
@@ -25,6 +26,7 @@ class Contents(object):
             'abstract': self.abstract,
             'author': self.author,
             'citation': self.citation,
+            'url': self.url,
         }
 
     def __str__(self):
@@ -38,6 +40,7 @@ class Contents(object):
             'abstract': self.abstract,
             'author': self.author,
             'citation': self.citation,
+            'url': self.url,
         })
 
     def __repr__(self):
