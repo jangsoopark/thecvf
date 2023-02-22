@@ -1,5 +1,7 @@
 from bs4 import BeautifulSoup
+from urllib import parse
 import requests
+import copy
 
 
 class TheCVF(object):
@@ -39,7 +41,7 @@ class TheCVF(object):
     def paper(self, uri):
         html = self.get(uri)
         bs = BeautifulSoup(html, 'html.parser')
-        content = bs.find('dd')
+        content = bs.find('dl')
         title = content.find('div', {'id': 'papertitle'}).text
         citation = content.find('div', {'id': 'authors'}).text
 
@@ -54,22 +56,50 @@ class TheCVF(object):
             'url': f'{self.host}/{uri}'
         }
 
-    def paper_list(self, type_, **params):
+    def paper_list(self, type_, topic='', **params):
         html = self.get(params['conference_type'][type_])
         bs = BeautifulSoup(html, 'html.parser')
         content = bs.find('div', {'id': 'content'})
-        conference_menu = content.find_all('dt', {'class': 'ptitle'})
+        _menu = content.find_all('dt', {'class': 'ptitle'})
 
-        paper_list = []
-        for e in conference_menu:
+        _paper_list = []
+        for e in _menu:
             link = e.find_all('a').pop()['href']
-            paper_list.append(
-                link
-            )
-        return paper_list
+            _paper_list.append((topic, link))
+        return _paper_list
 
     def conference_menu(self, type_, **params):
-        pass
+        html = self.get(params['conference_type'][type_])
+        bs = BeautifulSoup(html, 'html.parser')
+        content = bs.find('div', {'id': 'content'})
+        _menu = content.find_all('dd')
+
+        topic_list = []
+        for e in _menu:
+            if 'back' in e.text.lower():
+                continue
+            if 'all' in e.text.lower():
+                continue
+            # print(e.find('a')['href'])
+            link = e.find('a')['href']
+            topic = e.text
+            topic_list.append((
+                topic if type_ == 'workshop' else '',
+                link
+            ))
+
+        _paper_list = []
+        for topic, link in topic_list:
+            _params = copy.deepcopy(params)
+            _params['conference_type'][type_] = link
+            if type_ == 'workshop':
+                ws = params['conference_type'][type_].split('/')[1]
+                if ws not in link:
+                    _params['conference_type'][type_] = f'{ws}/{link}'
+
+            _paper_list.extend(self.paper_list(type_, topic, **_params))
+
+        return _paper_list
 
     @staticmethod
     def parse_conference_type(elements):

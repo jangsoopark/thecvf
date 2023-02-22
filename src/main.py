@@ -19,6 +19,12 @@ args = parser.parse_args()
 
 def main():
     cvpr = thecvf.CVPR()
+    _p = {
+        'main': cvpr.conference_parser,
+        'workshop': cvpr.workshop_parser,
+        'demo': cvpr.demo_parser,
+    }[args.type]
+
     main_menu = cvpr.parse_main_menu()
 
     papers = []
@@ -28,23 +34,24 @@ def main():
             continue
 
         common = e
-        break
+
     name = common['name']
     year = common['year']
-    paper_url_list = cvpr.conference_parser[year](args.type, **common)
 
+    paper_url_list = _p[year](args.type, **common)
     for p in tqdm(paper_url_list):
-        _paper_info = cvpr.paper(p)
+        topic, url = p
+        _paper_info = cvpr.paper(url)
         papers.append(thecvf.Contents(
             name=common['name'],
             year=common['year'],
             location=common['location'],
             type_=thecvf.common.index(args.type),
-            topic='',
-            title=_paper_info['title'],
-            abstract=_paper_info['abstract'],
-            author=_paper_info['author'],
-            citation=_paper_info['citation'],
+            topic=topic.strip(),
+            title=_paper_info['title'].strip(),
+            abstract=_paper_info['abstract'].strip(),
+            author=_paper_info['author'].strip(),
+            citation=_paper_info['citation'].strip(),
         ).json())
 
     with open(os.path.join(project_root, 'assets', f'{name}-{year}-{args.type}.json'), mode='w', encoding='utf-8') as f:
