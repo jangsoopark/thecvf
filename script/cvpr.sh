@@ -1,5 +1,5 @@
 
-MAIN_DIR=${0%/*}
+MAIN_DIR=${0%/*}/..
 SRC=src/main.py
 
 TITLE=cvpr
@@ -8,7 +8,7 @@ TYPE=main
 
 pushd $MAIN_DIR
 
-python $SRC \
+python3 $SRC \
   --title=$TITLE \
   --year=$YEAR \
   --type=TYPE
