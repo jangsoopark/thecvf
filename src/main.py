@@ -11,28 +11,32 @@ project_root = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 logging.basicConfig(level=logging.INFO)
 
 parser = argparse.ArgumentParser(description='The CVF')
-parser.add_argument('--title', type=str, default='cvpr', help='conference name')
-parser.add_argument('--year', type=str, default='2013', help='conference year')
+parser.add_argument('--title', type=str, default='wacv', help='conference name')
+parser.add_argument('--year', type=str, default='2023', help='conference year')
 parser.add_argument('--type', type=str, default='main', help='main, workshop, demo')
 args = parser.parse_args()
 
 
 def main():
-    cvpr = thecvf.CVPR()
+    conference = {
+        'cvpr': thecvf.CVPR(),
+        'wacv': thecvf.WACV(),
+    }[args.title]
     _p = {
-        'main': cvpr.conference_parser,
-        'workshop': cvpr.workshop_parser,
-        'demo': cvpr.demo_parser,
+        'main': conference.conference_parser,
+        'workshop': conference.workshop_parser,
     }[args.type]
 
-    main_menu = cvpr.parse_main_menu()
+    if args.title == 'cvpr' and args.year == '2022':
+        _p.update({'demo': conference.demo_parser})
+
+    main_menu = conference.parse_main_menu()
 
     papers = []
     common = dict()
     for e in main_menu:
         if e['year'] != args.year:
             continue
-
         common = e
 
     name = common['name']
@@ -41,7 +45,7 @@ def main():
     paper_url_list = _p[year](args.type, **common)
     for p in tqdm(paper_url_list):
         topic, url = p
-        _paper_info = cvpr.paper(url)
+        _paper_info = conference.paper(url)
         papers.append(thecvf.Contents(
             name=common['name'],
             year=common['year'],

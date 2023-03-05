@@ -6,7 +6,7 @@ TITLE=cvpr
 YEAR=2022
 TYPE=main
 
-pushd $MAIN_DIR
+pushd $MAIN_DIRq
 
 python3 $SRC \
   --title=$TITLE \
