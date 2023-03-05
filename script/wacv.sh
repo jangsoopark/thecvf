@@ -2,8 +2,8 @@
 MAIN_DIR=${0%/*}/..
 SRC=src/main.py
 
-TITLE=cvpr
-YEAR=2022
+TITLE=wacv
+YEAR=2023
 TYPE=main
 
 pushd $MAIN_DIR
