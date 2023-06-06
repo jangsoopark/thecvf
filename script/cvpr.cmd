@@ -5,7 +5,7 @@ SET MAIN_DIR=%~dp0\..
 SET SRC=src/main.py
 
 SET TITLE=cvpr
-SET YEAR=2022
+SET YEAR=2023
 SET TYPE=main
 
 PUSHD %MAIN_DIR%
