@@ -17,6 +17,7 @@ class CVPR(TheCVF):
             '2021': self.conference_menu,
             '2022': self.conference_menu,
             '2023': self.conference_menu,
+            '2024': self.conference_menu,
         }
 
         self.workshop_parser = {
@@ -31,6 +32,7 @@ class CVPR(TheCVF):
             '2021': self.conference_menu,
             '2022': self.conference_menu,
             '2023': self.conference_menu,
+            '2024': self.conference_menu,
         }
         self.demo_parser = {
             '2022': self.paper_list,

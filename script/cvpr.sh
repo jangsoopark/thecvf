@@ -3,10 +3,10 @@ MAIN_DIR=${0%/*}/..
 SRC=src/main.py
 
 TITLE=cvpr
-YEAR=2022
+YEAR=2024
 TYPE=main
 
-pushd $MAIN_DIRq
+pushd $MAIN_DIR
 
 python3 $SRC \
   --title=$TITLE \
