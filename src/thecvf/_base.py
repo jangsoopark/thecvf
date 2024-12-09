@@ -13,8 +13,8 @@ class TheCVF(object):
         response = requests.get(f'{self.host}/{uri}')
         return response.text
 
-    def parse_main_menu(self):
-        html = self.get('menu')
+    def parse_main_menu(self, other=False):
+        html = self.get('menu_other' if other else 'menu')
         bs = BeautifulSoup(html, 'html.parser')
         content = bs.find('div', {'id': 'content'})
         main_menu = content.find_all('dd')

@@ -21,6 +21,8 @@ def main():
     conference = {
         'cvpr': thecvf.CVPR(),
         'wacv': thecvf.WACV(),
+        'accv': thecvf.ACCV(),
+        'eccv': thecvf.ECCV(),
     }[args.title]
     _p = {
         'main': conference.conference_parser,
@@ -30,7 +32,7 @@ def main():
     if args.title == 'cvpr' and args.year == '2022':
         _p.update({'demo': conference.demo_parser})
 
-    main_menu = conference.parse_main_menu()
+    main_menu = conference.parse_main_menu(other=True if args.title in ['accv', 'eccv'] else False)
 
     papers = []
     common = dict()
